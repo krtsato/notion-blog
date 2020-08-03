@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  notion-blog:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile
+    image: notion-blog-img
+    container_name: notion-blog-cont
+    command: sh
+    volumes:
+      - .:/notion-blog
+    tty: true

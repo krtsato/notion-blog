@@ -10,4 +10,6 @@ services:
     command: sh
     volumes:
       - .:/notion-blog
+      - ./build/docker/.npmrc:/root/.npmrc
+      - ./build/docker/.yarnrc:/root/.yarnrc
     tty: true

@@ -3,3 +3,4 @@ build/docker/Dockerfile
 docker-compose.yml
 license
 readme.md
+.markdownlint.yml

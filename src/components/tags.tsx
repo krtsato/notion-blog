@@ -1,6 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import blogStyles from "../../styles/blog.module.css"
+import blogStyles from "../styles/blog.module.css"
 
 export default ({tags}) => {
   const tagArr = tags.split(",")

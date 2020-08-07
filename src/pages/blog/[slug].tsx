@@ -3,6 +3,7 @@ import fetch from 'node-fetch'
 import { useRouter } from 'next/router'
 import Header from '../../components/header'
 import Heading from '../../components/heading'
+import Tags from "../../components/tags"
 import components from '../../components/dynamic'
 import ReactJSXParser from '@zeit/react-jsx-parser'
 import blogStyles from '../../styles/blog.module.css'
@@ -143,7 +144,7 @@ const RenderPost = ({ post, redirect, preview }) => {
         <div className={blogStyles.previewAlertContainer}>
           <div className={blogStyles.previewAlert}>
             <b>Note:</b>
-            {` `}Viewing in preview mode{' '}
+            {` `}Viewing in preview mode{" "}
             <Link href={`/api/clear-preview?slug=${post.Slug}`}>
               <button className={blogStyles.escapePreview}>Exit Preview</button>
             </Link>
@@ -151,35 +152,30 @@ const RenderPost = ({ post, redirect, preview }) => {
         </div>
       )}
       <div className={blogStyles.post}>
-        <h1>{post.Page || ''}</h1>
-        {post.Authors.length > 0 && (
-          <div className="authors">By: {post.Authors.join(' ')}</div>
-        )}
-        {post.Date && (
-          <div className="posted">Posted: {getDateStr(post.Date)}</div>
-        )}
+        <h1>{post.Page || ""}</h1>
+        {post.Authors.length > 0 && <div className="authors">👩‍💻 {post.Authors.join(" ")}</div>}
+        {post.Date && <div className="posted">📆 {getDateStr(post.Date)}</div>}
+        <Tags tags={post.Tag} />
 
         <hr />
 
-        {(!post.content || post.content.length === 0) && (
-          <p>This post has no content</p>
-        )}
+        {(!post.content || post.content.length === 0) && <p>This post has no content</p>}
 
         {(post.content || []).map((block, blockIdx) => {
-          const { value } = block
-          const { type, properties, id, parent_id } = value
+          const {value} = block
+          const {type, properties, id, parent_id} = value
           const isLast = blockIdx === post.content.length - 1
           const isList = listTypes.has(type)
           let toRender = []
 
           if (isList) {
-            listTagName = components[type === 'bulleted_list' ? 'ul' : 'ol']
+            listTagName = components[type === "bulleted_list" ? "ul" : "ol"]
             listLastId = `list${id}`
 
             listMap[id] = {
               key: id,
               nested: [],
-              children: textBlock(properties.title, true, id),
+              children: textBlock(properties.title, true, id)
             }
 
             if (listMap[parent_id]) {
@@ -192,22 +188,20 @@ const RenderPost = ({ post, redirect, preview }) => {
             toRender.push(
               React.createElement(
                 listTagName,
-                { key: listLastId! },
+                {key: listLastId!},
                 Object.keys(listMap).map(itemId => {
                   if (listMap[itemId].isNested) return null
 
                   const createEl = item =>
                     React.createElement(
-                      components.li || 'ul',
-                      { key: item.key },
+                      components.li || "ul",
+                      {key: item.key},
                       item.children,
                       item.nested.length > 0
                         ? React.createElement(
-                            components.ul || 'ul',
-                            { key: item + 'sub-list' },
-                            item.nested.map(nestedId =>
-                              createEl(listMap[nestedId])
-                            )
+                            components.ul || "ul",
+                            {key: item + "sub-list"},
+                            item.nested.map(nestedId => createEl(listMap[nestedId]))
                           )
                         : null
                     )
@@ -229,50 +223,43 @@ const RenderPost = ({ post, redirect, preview }) => {
           }
 
           switch (type) {
-            case 'page':
-            case 'divider':
+            case "page":
+            case "divider":
               break
-            case 'text':
+            case "text":
               if (properties) {
                 toRender.push(textBlock(properties.title, false, id))
               }
               break
-            case 'image':
-            case 'video':
-            case 'embed': {
-              const { format = {} } = value
-              const {
-                block_width,
-                block_height,
-                display_source,
-                block_aspect_ratio,
-              } = format
+            case "image":
+            case "video":
+            case "embed": {
+              const {format = {}} = value
+              const {block_width, block_height, display_source, block_aspect_ratio} = format
               const baseBlockWidth = 768
               const roundFactor = Math.pow(10, 2)
               // calculate percentages
               const width = block_width
-                ? `${Math.round(
-                    (block_width / baseBlockWidth) * 100 * roundFactor
-                  ) / roundFactor}%`
-                : block_height || '100%'
+                ? `${Math.round((block_width / baseBlockWidth) * 100 * roundFactor) / roundFactor}%`
+                : block_height || "100%"
 
-              const isImage = type === 'image'
-              const Comp = isImage ? 'img' : 'video'
+              const isImage = type === "image"
+              const Comp = isImage ? "img" : "video"
               const useWrapper = block_aspect_ratio && !block_height
               const childStyle: CSSProperties = useWrapper
                 ? {
-                    width: '100%',
-                    height: '100%',
-                    border: 'none',
-                    position: 'absolute',
-                    top: 0,
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                    position: "absolute",
+                    top: 0
                   }
                 : {
                     width,
-                    border: 'none',
+                    border: "none",
                     height: block_height,
-                    display: 'block',
-                    maxWidth: '100%',
+                    display: "block",
+                    maxWidth: "100%"
                   }
 
               let child = null
@@ -284,7 +271,7 @@ const RenderPost = ({ post, redirect, preview }) => {
                     style={childStyle}
                     src={display_source}
                     key={!useWrapper ? id : undefined}
-                    className={!useWrapper ? 'asset-wrapper' : undefined}
+                    className={!useWrapper ? "asset-wrapper" : undefined}
                   />
                 )
               } else {
@@ -292,11 +279,9 @@ const RenderPost = ({ post, redirect, preview }) => {
                 child = (
                   <Comp
                     key={!useWrapper ? id : undefined}
-                    src={`/api/asset?assetUrl=${encodeURIComponent(
-                      display_source as any
-                    )}&blockId=${id}`}
+                    src={`/api/asset?assetUrl=${encodeURIComponent(display_source as any)}&blockId=${id}`}
                     controls={!isImage}
-                    alt={`An ${isImage ? 'image' : 'video'} from Notion`}
+                    alt={`An ${isImage ? "image" : "video"} from Notion`}
                     loop={!isImage}
                     muted={!isImage}
                     autoPlay={!isImage}
@@ -310,11 +295,10 @@ const RenderPost = ({ post, redirect, preview }) => {
                   <div
                     style={{
                       paddingTop: `${Math.round(block_aspect_ratio * 100)}%`,
-                      position: 'relative',
+                      position: "relative"
                     }}
                     className="asset-wrapper"
-                    key={id}
-                  >
+                    key={id}>
                     {child}
                   </div>
                 ) : (
@@ -323,21 +307,21 @@ const RenderPost = ({ post, redirect, preview }) => {
               )
               break
             }
-            case 'header':
-              renderHeading('h1')
+            case "header":
+              renderHeading("h1")
               break
-            case 'sub_header':
-              renderHeading('h2')
+            case "sub_header":
+              renderHeading("h2")
               break
-            case 'sub_sub_header':
-              renderHeading('h3')
+            case "sub_sub_header":
+              renderHeading("h3")
               break
-            case 'code': {
+            case "code": {
               if (properties.title) {
                 const content = properties.title[0][0]
                 const language = properties.language[0][0]
 
-                if (language === 'LiveScript') {
+                if (language === "LiveScript") {
                   // this requires the DOM for now
                   toRender.push(
                     <ReactJSXParser
@@ -347,12 +331,12 @@ const RenderPost = ({ post, redirect, preview }) => {
                       componentsOnly={false}
                       renderInpost={false}
                       allowUnknownElements={true}
-                      blacklistedTags={['script', 'style']}
+                      blacklistedTags={["script", "style"]}
                     />
                   )
                 } else {
                   toRender.push(
-                    <components.Code key={id} language={language || ''}>
+                    <components.Code key={id} language={language || ""}>
                       {content}
                     </components.Code>
                   )
@@ -360,43 +344,28 @@ const RenderPost = ({ post, redirect, preview }) => {
               }
               break
             }
-            case 'quote': {
+            case "quote": {
               if (properties.title) {
-                toRender.push(
-                  React.createElement(
-                    components.blockquote,
-                    { key: id },
-                    properties.title
-                  )
-                )
+                toRender.push(React.createElement(components.blockquote, {key: id}, properties.title))
               }
               break
             }
-            case 'callout': {
+            case "callout": {
               toRender.push(
                 <div className="callout" key={id}>
-                  {value.format?.page_icon && (
-                    <div>{value.format?.page_icon}</div>
-                  )}
-                  <div className="text">
-                    {textBlock(properties.title, true, id)}
-                  </div>
+                  {value.format?.page_icon && <div>{value.format?.page_icon}</div>}
+                  <div className="text">{textBlock(properties.title, true, id)}</div>
                 </div>
               )
               break
             }
-            case 'tweet': {
+            case "tweet": {
               if (properties.html) {
-                toRender.push(
-                  <div
-                    dangerouslySetInnerHTML={{ __html: properties.html }}
-                    key={id}
-                  />
-                )
+                toRender.push(<div dangerouslySetInnerHTML={{__html: properties.html}} key={id} />)
               }
               break
             }
-            case 'equation': {
+            case "equation": {
               if (properties && properties.title) {
                 const content = properties.title[0][0]
                 toRender.push(
@@ -408,11 +377,8 @@ const RenderPost = ({ post, redirect, preview }) => {
               break
             }
             default:
-              if (
-                process.env.NODE_ENV !== 'production' &&
-                !listTypes.has(type)
-              ) {
-                console.log('unknown type', type)
+              if (process.env.NODE_ENV !== "production" && !listTypes.has(type)) {
+                console.log("unknown type", type)
               }
               break
           }

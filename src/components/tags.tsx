@@ -7,7 +7,7 @@ export default ({tags}) => {
   return (
     tagArr.map(tag => (
       <Link href={`/tags/[tagName]`} as={`/tags/${tag}`} passHref prefetch={false}>
-        <a>#{tag}</a>
+        <a>{tag}</a>
       </Link>
     ))
   )

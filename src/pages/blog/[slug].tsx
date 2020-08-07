@@ -154,7 +154,7 @@ const RenderPost = ({ post, redirect, preview }) => {
       <div className={blogStyles.post}>
         <h1>{post.Page || ""}</h1>
         {post.Authors.length > 0 && <span className={blogStyles.authors}>👩‍💻 {post.Authors.join(" ")}</span>}
-        {post.Date && <span className={blogStyles.posts}>📆 {getDateStr(post.Date)}</span>}
+        {post.Date && <span className={blogStyles.postDate}>📆 {getDateStr(post.Date)}</span>}
         {post.Tags && <span>🏷 <Tags tags={post.Tags} /></span>}
 
         <hr />

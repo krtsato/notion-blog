@@ -140,13 +140,13 @@
 /* meta info under a post title */
 
 .authors {
-  margin-left: 2em
+  margin-right: 1em;
 }
 
-.posted {
-  margin-left: 2em
+.postDate {
+  margin-right: 1em;
 }
 
 .tag {
-  margin-left: 1em
+  margin-right: 2px;
 }

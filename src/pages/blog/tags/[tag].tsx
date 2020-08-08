@@ -40,7 +40,7 @@ export async function getStaticProps({params: {tag}, preview}) {
       posts,
       tag
     },
-    revalidate: 10
+    unstable_revalidate: 5,
   }
 }
 

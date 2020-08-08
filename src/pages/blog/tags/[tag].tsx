@@ -92,11 +92,13 @@ export default ({tag, posts = [], preview}) => {
                 </div>
               </Link>
             </h3>
-            {post.Authors.length > 0 && (
-              <span className={blogStyles.authors}>👩‍💻 {post.Authors.join(" ")}</span>
-            )}
+            {post.Authors.length > 0 && <span className={blogStyles.authors}>👩‍💻 {post.Authors.join(" ")}</span>}
             {post.Date && <span className={blogStyles.postDate}>📆 {getDateStr(post.Date)}</span>}
             {post.Tags.length > 0 && <span>🏷 <Tags tags={post.Tags} /></span>}
+            <p>
+              {(!post.preview || post.preview.length === 0) && 'No preview available'}
+              {(post.preview || []).map((block, idx) => textBlock(block, true, `${post.Slug}${idx}`))}
+            </p>
           </div>
         ))}
       </div>

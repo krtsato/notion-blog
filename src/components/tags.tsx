@@ -1,17 +1,14 @@
 import React from "react"
 import Link from "next/link"
 import blogStyles from "../styles/blog.module.css"
+import {getTagLink} from "../../src/lib/blog-helpers"
 
-export default ({tags}) => {
-  const tagArr = tags.split(",")
-
-  return (
-    tagArr.map(tag => (
-      <span className={blogStyles.tag}>
-        <Link href={`/tags/[tagName]`} as={`/tags/${tag}`} passHref prefetch={false}>
-          <a>{tag}</a>
-        </Link>
-      </span>
-    ))
-  )
-}
+export default ({tags}) => (
+  tags.map(tag => (
+    <span className={blogStyles.tag} key={tag}>
+      <Link href="/blog/tags/[tag]`" as={getTagLink(tag)}>
+        <a>{tag}</a>
+      </Link>
+    </span>
+  ))
+)

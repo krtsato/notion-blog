@@ -1,6 +1,4 @@
-export const getBlogLink = (slug: string) => {
-  return `/blog/${slug}`
-}
+export const getBlogLink = (slug: string) => `/blog/${slug}`
 
 export const getDateStr = date => {
   return new Date(date).toLocaleString('en-US', {
@@ -9,6 +7,8 @@ export const getDateStr = date => {
     year: 'numeric',
   })
 }
+
+export const getTagLink = (tag: string) => `/blog/tags/${tag}`
 
 export const postIsPublished = (post: any) => {
   return post.Published === 'Yes'

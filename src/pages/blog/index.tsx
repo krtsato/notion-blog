@@ -65,7 +65,7 @@ export default ({ posts = [], preview }) => {
       <div className={`${sharedStyles.layout} ${blogStyles.blogIndex}`}>
         <h1>My Notion Blog</h1>
         {posts.length === 0 && (
-          <p className={blogStyles.noPosts}>There are no posts yet</p>
+          <p className={blogStyles.noPosts}>まだ投稿がありません</p>
         )}
         {posts.map(post => {
           return (

@@ -149,4 +149,6 @@
 
 .tag {
   margin-right: 0.5em;
+  cursor: pointer;
+  text-decoration: underline;
 }

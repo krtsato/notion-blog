@@ -80,7 +80,7 @@ export default ({tag, posts = [], preview}) => {
         </div>
       )}
       <div className={`${sharedStyles.layout} ${blogStyles.blogIndex}`}>
-        <h1>{tag} を含む記事</h1>
+        <h1>{tag} を含む投稿</h1>
         {posts.length === 0 && <p className={blogStyles.noPosts}>まだ投稿がありません</p>}
         {posts.map(post => (
           <div className={blogStyles.postPreview} key={post.Slug}>
